@@ -31,7 +31,8 @@ for (let c = 0; c < brickColumnCount; c++) {
 document.addEventListener("keydown", this.keyDownHandler, false);
 document.addEventListener("keyup", this.keyUpHandler, false);
 
-const keyDownHandler = (e) => {
+
+function keyDownHandler(e) {
     if (e.key == "Right" || e.key == "ArrowRight") {
         rightPressed = true;
     }
@@ -40,7 +41,7 @@ const keyDownHandler = (e) => {
     }
 }
 
-const keyUpHandler = (e) => {
+function keyUpHandler(e) {
     if (e.key == "Right" || e.key == "ArrowRight") {
         rightPressed = false;
     }
@@ -52,7 +53,7 @@ const keyUpHandler = (e) => {
 const drawBall = () => {
     context.beginPath();
     context.arc(x, y, ballRadius, 0, Math.PI * 2);
-    context.fillStyle = "#0095DD";
+    context.fillStyle = "#FFFFFF";
     context.fill();
     context.closePath();
 }
@@ -75,7 +76,7 @@ const drawBricks = () => {
                 bricks[c][r].y = brickY;
                 context.beginPath();
                 context.rect(brickX, brickY, brickWidth, brickHeight)
-                context.fillStyle = "#0095DD";
+                context.fillStyle = "#E64848";
                 context.fill();
                 context.closePath();
             }
