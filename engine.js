@@ -19,7 +19,10 @@ let dy = -2;
 let rightPressed = false;
 let leftPressed = false;
 let score = 0;
+let lives = 3;
 
+document.addEventListener("keydown", this.keyDownHandler, false);
+document.addEventListener("keyup", this.keyUpHandler, false);
 
 var bricks = [];
 for (let c = 0; c < brickColumnCount; c++) {
@@ -28,10 +31,6 @@ for (let c = 0; c < brickColumnCount; c++) {
         bricks[c][r] = { x: 0, y: 0, status: 1 };
     }
 }
-
-document.addEventListener("keydown", this.keyDownHandler, false);
-document.addEventListener("keyup", this.keyUpHandler, false);
-
 
 function keyDownHandler(e) {
     if (e.key == "Right" || e.key == "ArrowRight") {
@@ -84,10 +83,15 @@ const drawBricks = () => {
         }
     }
 }
-const drawScore = () =>{
+const drawScore = () => {
     context.font = "16px Arial";
     context.fillStyle = "#FFFFFF";
-    context.fillText(`Score: ${score}`,8, 20)
+    context.fillText(`Score: ${score}`, 8, 20)
+}
+const drawLives = () => {
+    context.font = "16px Arial";
+    context.fillStyle = "#FFFFFF";
+    context.fillText(`Lives: ${lives}`, canvas.width - 65, 20)
 }
 const collisionDetection = () => {
     for (let c = 0; c < brickColumnCount; c++) {
@@ -98,7 +102,7 @@ const collisionDetection = () => {
                     dy = -dy;
                     b.status = 0
                     score++
-                    if(score === brickRowCount * brickColumnCount){
+                    if (score === brickRowCount * brickColumnCount) {
                         alert("CONGRATULATIONS, YOU WIN!");
                         document.location.reload()
                         clearInterval(this.interval)
@@ -115,13 +119,16 @@ const draw = () => {
     drawBall();
     drawPaddle();
     drawScore();
+    drawLives();
     collisionDetection();
 
     if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
         dx = -dx;
+      
     }
     if (y + dy < ballRadius) {
         dy = -dy;
+        
     }
     else if (y + dy > canvas.height - ballRadius) {
         if (x > paddleX && x < paddleX + paddleWidth) {
@@ -130,9 +137,18 @@ const draw = () => {
             }
         }
         else {
-            //alert("GAME OVER");
-            document.location.reload();
-            clearInterval(interval);
+            lives--;
+            if (!lives) {
+                alert("GAME OVER");
+                document.location.reload();
+                clearInterval(interval);
+            } else {
+                x = canvas.width / 2;
+                y = canvas.height - 30;
+                dx = 3;
+                dy = -3;
+                paddleX = (canvas.width - paddleWidth) / 2
+            }
         }
     }
     if (rightPressed && paddleX < canvas.width - paddleWidth) {
@@ -143,7 +159,7 @@ const draw = () => {
     }
     x += dx;
     y += dy;
+    requestAnimationFrame(draw)
 
 }
-let interval = setInterval(draw, 10)
-
+draw();
