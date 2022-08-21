@@ -18,6 +18,7 @@ let dx = 2;
 let dy = -2;
 let rightPressed = false;
 let leftPressed = false;
+let score = 0;
 
 
 var bricks = [];
@@ -83,7 +84,11 @@ const drawBricks = () => {
         }
     }
 }
-
+const drawScore = () =>{
+    context.font = "16px Arial";
+    context.fillStyle = "#FFFFFF";
+    context.fillText(`Score: ${score}`,8, 20)
+}
 const collisionDetection = () => {
     for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
@@ -92,6 +97,12 @@ const collisionDetection = () => {
                 if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
                     dy = -dy;
                     b.status = 0
+                    score++
+                    if(score === brickRowCount * brickColumnCount){
+                        alert("CONGRATULATIONS, YOU WIN!");
+                        document.location.reload()
+                        clearInterval(this.interval)
+                    }
                 }
             }
         }
@@ -103,6 +114,7 @@ const draw = () => {
     drawBricks();
     drawBall();
     drawPaddle();
+    drawScore();
     collisionDetection();
 
     if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
